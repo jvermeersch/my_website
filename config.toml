@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "https://julienvermeersch.netlify.app/"
 languageCode = "en-us"
-title = "Julien's Portfolio Website"
+title = "Julien Vermeersch's Portfolio Website"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
