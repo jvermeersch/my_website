@@ -13,4 +13,4 @@ title: My CV
 
 Find attached the most up-to-date version of my CV. 
 
-![Resume](pic01.jpg)
+![Resume](CV.jpg)
