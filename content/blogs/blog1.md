@@ -8,6 +8,7 @@ draft: false
 image: "CV.jp2"
 keywords: ""
 slug: blog1
-title: CV
+title: My CV
 ---
 
+![Resume](/img/CV.jpg2)
