@@ -8,7 +8,5 @@ draft: false
 image: pic09.jpg
 keywords: ""
 slug: blog2
-title: Magna
+title: My Projects
 ---
-
-
