@@ -3,9 +3,9 @@ categories:
 - ""
 - ""
 date: "2017-10-31T21:28:43-05:00"
-description: ""
+description: Resume
 draft: false
-image: CV.jp2
+image: 
 keywords: ""
 slug: blog1
 title: My CV
@@ -13,4 +13,4 @@ title: My CV
 
 Find attached the most up-to-date version of my CV. 
 
-![Resume](/img/CV.jpg2)
+![Resume](/img/CV.jp2)
