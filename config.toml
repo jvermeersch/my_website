@@ -20,7 +20,7 @@ disqusShortname = ""
 
   # Provide your metadata here.
   name = "Julien Vermeersch"
-  description = "I am 21 years old and currently studying the MFA at London Business School."
+  description = "Belgian, 21 years old, MFA student at London Business School."
 
   # Link custom assets relative to /static
   custom_css = []
@@ -92,14 +92,14 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Aliquam"
-      subtitle = "Ipsum Dolor Sit Amet"
+      title = "About Me"
+      subtitle = "Curriculum Vitae"
       image = "pic01.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
+      title = "R project"
+      subtitle = "Homework 3"
       image = "pic02.jpg"
       url = "blogs/tempus"
 
