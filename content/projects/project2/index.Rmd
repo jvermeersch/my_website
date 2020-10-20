@@ -51,11 +51,11 @@ library(png)
 library(magick)
 ```
 
+Welcome to my blog on the evolution of GDP and its components. In this section, I will discuss an analysis I did as part of my Data Analytics course at the London Business School. 
 
-The main components of GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the [Wikipedia GDP page](https://en.wikipedia.org/wiki/Gross_domestic_product).
+GDP can be divided into 4 main components, which are consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the [Wikipedia GDP page](https://en.wikipedia.org/wiki/Gross_domestic_product).
 
-The GDP data we will look at is from the [United Nations' National Accounts Main Aggregates Database](https://unstats.un.org/unsd/snaama/Downloads), which contains estimates of total GDP and its components for all countries from 1970 to today. We will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country's GDP. The file we will work with is [GDP and its breakdown at constant 2010 prices in US Dollars](http://unstats.un.org/unsd/amaapi/api/file/6) and it has already been saved in the Data directory. Have a look at the Excel file to see how it is structured and organised
-
+The GDP data I used is from the [United Nations' National Accounts Main Aggregates Database](https://unstats.un.org/unsd/snaama/Downloads), which contains estimates of total GDP and its components for all countries from 1970 to today. In this blog, I will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country's GDP. The file I will work with is [GDP and its breakdown at constant 2010 prices in US Dollars](http://unstats.un.org/unsd/amaapi/api/file/6).
 
 ```{r read_GDP_data}
 
@@ -65,7 +65,8 @@ UN_GDP_data  <-  read_excel(here::here("data", "Download-GDPconstant-USD-countri
 
 ```
 
-The first thing we need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. All figures will be expressed in billions. 
+The first step of this analysis is to tidy the data. We want to change the data from its current wide format to a long, tidy format. 
+
 
 ```{r reshape_GDP_data}
 
@@ -83,9 +84,7 @@ glimpse(tidy_GDP_data)
 country_list <- c("United States","India", "Germany")
 ```
 
-GDP is the sum of Household Expenditure (Consumption *C*), Gross Capital Formation (business investment *I*), Government Expenditure (G) and Net Exports (exports - imports). We will calculate it given the components discussed above. 
-
-
+Once this has been done, we can start to split GDP up in its different components and examine how they have evolved over time in different countries. For this analysis, we will be looking at the United States, India and Germany. 
 
 ```{r, GDP_Components_Over_Time, fig1, fig.width=10, fig.height=6}
 
@@ -126,6 +125,8 @@ ggplot(gdp_time, aes(x=year, y=value, color= IndicatorName)) +
 
 From these graphs we can see that different countries have had different GDP patterns over time. For example, in the United States imports increased at an incredibly rapid rate over the past couple of years. 
 
+Next we calculate GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe. 
+
 ```{r, calculate GDP}
 
 #calculating GDP as a sum of its components
@@ -163,8 +164,6 @@ GDP_Countries
 
 ```
 
-Here we calculated GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe. 
-
 ```{r, % difference}
 #selecting indicator GDP from UN GDP data
 UN_GDP <- UN_GDP_data %>% 
@@ -191,6 +190,8 @@ paste("Percentage difference in GDP calculated vs GDP figure included in the dat
 GDP_diff
 
 ```
+
+The figures that result from our own calculations are pretty close to the actual figures, however there are some inor differences, which are shown in the table above. 
 
 
 ```{r, Proportion_GDP, fig2, fig.width=10, fig.height=6}

@@ -14,12 +14,13 @@ output:
 
 
 
-<p>The main components of GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the <a href="https://en.wikipedia.org/wiki/Gross_domestic_product">Wikipedia GDP page</a>.</p>
-<p>The GDP data we will look at is from the <a href="https://unstats.un.org/unsd/snaama/Downloads">United Nations’ National Accounts Main Aggregates Database</a>, which contains estimates of total GDP and its components for all countries from 1970 to today. We will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country’s GDP. The file we will work with is <a href="http://unstats.un.org/unsd/amaapi/api/file/6">GDP and its breakdown at constant 2010 prices in US Dollars</a> and it has already been saved in the Data directory. Have a look at the Excel file to see how it is structured and organised</p>
+<p>Welcome to my blog on the evolution of GDP and its components. In this section, I will discuss an analysis I did as part of my Data Analytics course at the London Business School.</p>
+<p>GDP can be divided into 4 main components, which are consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the <a href="https://en.wikipedia.org/wiki/Gross_domestic_product">Wikipedia GDP page</a>.</p>
+<p>The GDP data I used is from the <a href="https://unstats.un.org/unsd/snaama/Downloads">United Nations’ National Accounts Main Aggregates Database</a>, which contains estimates of total GDP and its components for all countries from 1970 to today. In this blog, I will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country’s GDP. The file I will work with is <a href="http://unstats.un.org/unsd/amaapi/api/file/6">GDP and its breakdown at constant 2010 prices in US Dollars</a>.</p>
 <pre class="r"><code>UN_GDP_data  &lt;-  read_excel(here::here(&quot;data&quot;, &quot;Download-GDPconstant-USD-countries.xls&quot;), # Excel filename
                 sheet=&quot;Download-GDPconstant-USD-countr&quot;, # Sheet name
                 skip=2) # Number of rows to skip</code></pre>
-<p>The first thing we need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. All figures will be expressed in billions.</p>
+<p>The first step of this analysis is to tidy the data. We want to change the data from its current wide format to a long, tidy format.</p>
 <pre class="r"><code>tidy_GDP_data  &lt;-  UN_GDP_data %&gt;% 
   pivot_longer(
                cols=&quot;1970&quot;:&quot;2017&quot;,
@@ -38,7 +39,7 @@ glimpse(tidy_GDP_data)</code></pre>
 ## $ value         &lt;dbl&gt; 5.56e+09, 5.33e+09, 5.20e+09, 5.75e+09, 6.15e+09, 6.32e…</code></pre>
 <pre class="r"><code># Let us compare GDP components for these 3 countries
 country_list &lt;- c(&quot;United States&quot;,&quot;India&quot;, &quot;Germany&quot;)</code></pre>
-<p>GDP is the sum of Household Expenditure (Consumption <em>C</em>), Gross Capital Formation (business investment <em>I</em>), Government Expenditure (G) and Net Exports (exports - imports). We will calculate it given the components discussed above.</p>
+<p>Once this has been done, we can start to split GDP up in its different components and examine how they have evolved over time in different countries. For this analysis, we will be looking at the United States, India and Germany.</p>
 <pre class="r"><code>gdp_time &lt;- tidy_GDP_data %&gt;% 
   #filtering for the components of GDP and countries that we need
   filter(Country %in% country_list,
@@ -72,6 +73,7 @@ ggplot(gdp_time, aes(x=year, y=value, color= IndicatorName)) +
   theme(axis.title.x=element_blank())</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/GDP_Components_Over_Time,%20fig1-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>From these graphs we can see that different countries have had different GDP patterns over time. For example, in the United States imports increased at an incredibly rapid rate over the past couple of years.</p>
+<p>Next we calculate GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe.</p>
 <pre class="r"><code>#calculating GDP as a sum of its components
 GDP_Countries &lt;- tidy_GDP_data %&gt;% 
   #filtering for the components of GDP 
@@ -118,7 +120,6 @@ GDP_Countries</code></pre>
 ##  9  1970 Armenia                                NA 
 ## 10  1970 Aruba                           234175779.
 ## # … with 10,550 more rows</code></pre>
-<p>Here we calculated GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe.</p>
 <pre class="r"><code>#selecting indicator GDP from UN GDP data
 UN_GDP &lt;- UN_GDP_data %&gt;% 
   filter(IndicatorName==&quot;Gross Domestic Product (GDP)&quot;) %&gt;% 
@@ -157,6 +158,7 @@ paste(&quot;Percentage difference in GDP calculated vs GDP figure included in th
 ##  9 Armenia             1970                      NA      
 ## 10 Aruba               1970                      -0.0200 
 ## # … with 10,550 more rows</code></pre>
+<p>The figures that result from our own calculations are pretty close to the actual figures, however there are some inor differences, which are shown in the table above.</p>
 <pre class="r"><code>trans_UN_GDP_Data &lt;-  UN_GDP_data %&gt;% 
   #filtering for the components of GDP that we need for 3 selected countries
   filter(Country %in% country_list,
