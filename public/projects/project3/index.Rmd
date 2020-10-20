@@ -53,13 +53,15 @@ library(magick)
 
 ## Introduction
 
+Welcome to my blog on the relationship between yield curve inversion and recessions. In this section, I will discuss an analysis I did as part of my Data Analytics course at the London Business School. 
+
 Every so often, we hear warnings from commentators on the "inverted yield curve" and its predictive power with respect to recessions. An explainer what a [inverted yield curve is can be found here](https://www.reuters.com/article/us-usa-economy-yieldcurve-explainer/explainer-what-is-an-inverted-yield-curve-idUSKBN1O50GA). If you'd rather listen to something, here is a great podcast from [NPR on yield curve indicators](https://www.podbean.com/media/share/dir-4zgj9-6aefd11).
 
 In addition, many articles and commentators think that, e.g., [*Yield curve inversion is viewed as a harbinger of recession*](https://www.bloomberg.com/news/articles/2019-08-14/u-k-yield-curve-inverts-for-first-time-since-financial-crisis). One can always doubt whether inversions are truly a harbinger of recessions, and [use the attached parable on yield curve inversions](https://twitter.com/5_min_macro/status/1161627360946511873).
 
-In the following case we will look at US data and use the [FRED database](https://fred.stlouisfed.org/) to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. 
+In the following case I will look at US data and use the [FRED database](https://fred.stlouisfed.org/) to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. 
 
-First, we will use the `tidyquant` package to download monthly rates for different durations. 
+First, I use the `tidyquant` package to download monthly rates for different durations. 
 
 ```{r get_rates, warning=FALSE}
 # Get a list of FRED codes for US rates and US yield curve; choose monthly frequency
@@ -112,7 +114,7 @@ The dataframe `df` has three columns (variables):
 - `date`: already a date object
 - `price`: the actual yield on that date
 
-The first thing would be to join this dataframe `df` with the dataframe `mylookup` so that we have a more readable version of maturities, durations, etc.
+Next we want to join this dataframe `df` with the dataframe `mylookup` so that we have a more readable version of maturities, durations, etc.
 
 
 ```{r join_data, warning=FALSE}
