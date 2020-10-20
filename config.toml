@@ -143,7 +143,7 @@ disqusShortname = ""
     enable = true
     title = "Integra Fund"
     subtitle = """In the summer of 2019 I was a summer analyst at Integra Fund, a Belgian PE fund. 
-    During my internship, I closely worked with one of their portfolio companies, Sack Zelfbouw.
+    During my internship, I closely worked with one of the fund's portfolio companies, Sack Zelfbouw.
     Sack supplies DIY kits to individuals who wish to build or renovate their own house."""
     buttonText = "Take me there"
     url = "https://sackzelfbouw.be/"
