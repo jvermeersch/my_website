@@ -98,22 +98,22 @@ disqusShortname = ""
       url = "blogs/blog1"
 
     [[params.tiles.showcase]]
-      title = "R project"
-      subtitle = "Homework 3"
+      title = "Movie Ratings"
+      subtitle = "An overview of the different genres"
       image = "pic02.jpg"
       url = "blogs/blog2"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
+      title = "GDP Components"
+      subtitle = "An in depth comparison"
       image = "pic03.jpg"
       url = "blogs/magna"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
+      title = "Yield Curve Inversion"
+      subtitle = "Is a recession looming around the corner?"
       image = "pic04.jpg"
-      url = "blogs/ipsum"
+      url = "blogs/blog4"
 
     # [[params.tiles.showcase]]
     #  title = "Consequat"
