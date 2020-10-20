@@ -103,7 +103,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "AirBnb in Hong Kong"
       subtitle = "A prediction of the price for 4 nights in HK"
-      image = "pic02.jpg"
+      image = "HK_skyline.jpg"
       url = "projects/project1"
 
     [[params.tiles.showcase]]
@@ -115,7 +115,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
       subtitle = "Is a recession looming around the corner?"
-      image = "pic04.jpg"
+      image = "recession.jpg"
       url = "projects/project3"
 
     # [[params.tiles.showcase]]
