@@ -141,14 +141,12 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "projects"
+    title = "Integra Fund"
+    subtitle = """In the summer of 2019 I was a summer analyst at Integra Fund, a Belgian PE fund. 
+    During my internship, I closely worked with one of their portfolio companies, Sack Zelfbouw.
+    Sack supplies DIY kits to individuals who wish to build or renovate their own house."""
+    buttonText = "Take me there"
+    url = "https://sackzelfbouw.be/"
 
 
   # Contact section
