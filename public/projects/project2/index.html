@@ -83,17 +83,12 @@
                             
 
 
-<div id="challenge-2gdp-components-over-time-and-among-countries" class="section level1">
-<h1>Challenge 2:GDP components over time and among countries</h1>
-<p>At the risk of oversimplifying things, the main components of gross domestic product, GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the <a href="https://en.wikipedia.org/wiki/Gross_domestic_product">Wikipedia GDP page</a>.</p>
+<p>The main components of GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the <a href="https://en.wikipedia.org/wiki/Gross_domestic_product">Wikipedia GDP page</a>.</p>
 <p>The GDP data we will look at is from the <a href="https://unstats.un.org/unsd/snaama/Downloads">United Nations’ National Accounts Main Aggregates Database</a>, which contains estimates of total GDP and its components for all countries from 1970 to today. We will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country’s GDP. The file we will work with is <a href="http://unstats.un.org/unsd/amaapi/api/file/6">GDP and its breakdown at constant 2010 prices in US Dollars</a> and it has already been saved in the Data directory. Have a look at the Excel file to see how it is structured and organised</p>
 <pre class="r"><code>UN_GDP_data  &lt;-  read_excel(here::here(&quot;data&quot;, &quot;Download-GDPconstant-USD-countries.xls&quot;), # Excel filename
                 sheet=&quot;Download-GDPconstant-USD-countr&quot;, # Sheet name
                 skip=2) # Number of rows to skip</code></pre>
-<p>The first thing you need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. Please express all figures in billions (divide values by <code>1e9</code>, or <span class="math inline">\(10^9\)</span>), and you want to rename the indicators into something shorter.</p>
-<blockquote>
-<p>make sure you remove <code>eval=FALSE</code> from the next chunk of R code– I have it there so I could knit the document</p>
-</blockquote>
+<p>The first thing we need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. All figures will be expressed in billions.</p>
 <pre class="r"><code>tidy_GDP_data  &lt;-  UN_GDP_data %&gt;% 
   pivot_longer(
                cols=&quot;1970&quot;:&quot;2017&quot;,
@@ -145,6 +140,7 @@ ggplot(gdp_time, aes(x=year, y=value, color= IndicatorName)) +
     color= &quot;Components of GDP&quot;)+
   theme(axis.title.x=element_blank())</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/GDP_Components_Over_Time,%20fig1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>From these graphs we can see that different countries have had different GDP patterns over time. For example, in the United States imports increased at an incredibly rapid rate over the past couple of years.</p>
 <pre class="r"><code>#calculating GDP as a sum of its components
 GDP_Countries &lt;- tidy_GDP_data %&gt;% 
   #filtering for the components of GDP 
@@ -191,9 +187,7 @@ GDP_Countries</code></pre>
 ##  9  1970 Armenia                                NA 
 ## 10  1970 Aruba                           234175779.
 ## # … with 10,550 more rows</code></pre>
-<blockquote>
-<p>What is the % difference between what you calculated as GDP and the GDP figure included in the dataframe?</p>
-</blockquote>
+<p>Here we calculated GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe.</p>
 <pre class="r"><code>#selecting indicator GDP from UN GDP data
 UN_GDP &lt;- UN_GDP_data %&gt;% 
   filter(IndicatorName==&quot;Gross Domestic Product (GDP)&quot;) %&gt;% 
@@ -232,18 +226,9 @@ paste(&quot;Percentage difference in GDP calculated vs GDP figure included in th
 ##  9 Armenia             1970                      NA      
 ## 10 Aruba               1970                      -0.0200 
 ## # … with 10,550 more rows</code></pre>
-<blockquote>
-<p>What is this last chart telling you? Can you explain in a couple of paragraphs the different dynamic among these three countries?</p>
-</blockquote>
-<p>This last chart compares the change in the proportion of the various components of GDP over time for three countries (United States, India and Germany). Since the early 2000s, Germany has increased the proportion of its GDP from Net Exports (Exports-Imports) and now has one of the highest trade surpluses in the world - this is an indicator of economic strength and competitiveness.</p>
-<p>In India proportion of GDP from Household Expenditure has decreased sharply while there has been a sharp increase in the proportion of its GDP from Gross Capital Formation - this shows that the economy is growing quickly and investing in fixed asset (roads, railways, machinery, etc.)</p>
-<p>Lastly, in the United States the proportion of GDP from Household Expenditure has increased while the Net Exports decreased, implying that US is slightly relying more on imports of goods. Also, proportion of GDP from government expenditure has been slowly decreasing since 1970, indicating the reduced size of US government and its fiscal decentralization approach in the country.</p>
-<blockquote>
-<p>Change list to include my own country: Belgium.</p>
-</blockquote>
 <pre class="r"><code>trans_UN_GDP_Data &lt;-  UN_GDP_data %&gt;% 
   #filtering for the components of GDP that we need for 3 selected countries
-  filter(Country %in% c(&quot;Italy&quot;, &quot;Canada&quot;, &quot;Belgium&quot;),
+  filter(Country %in% country_list,
          IndicatorName %in% c(&quot;Gross capital formation&quot;, 
                               &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
                               &quot;Imports of goods and services&quot;,
@@ -300,7 +285,9 @@ ggplot(trans_UN_GDP_Data, aes(x=year, y=Proportion, color= IndicatorName)) +
   scale_y_continuous(labels = scales::percent)+
   theme_bw()</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/Proportion_GDP,%20fig2-1.png" width="960" style="display: block; margin: auto;" /></p>
-</div>
+<p>This last chart compares the change in the proportion of the various components of GDP over time for three countries (United States, India and Germany). Since the early 2000s, Germany has increased the proportion of its GDP from Net Exports (Exports-Imports) and now has one of the highest trade surpluses in the world - this is an indicator of economic strength and competitiveness.</p>
+<p>In India proportion of GDP from Household Expenditure has decreased sharply while there has been a sharp increase in the proportion of its GDP from Gross Capital Formation - this shows that the economy is growing quickly and investing in fixed asset (roads, railways, machinery, etc.)</p>
+<p>Lastly, in the United States the proportion of GDP from Household Expenditure has increased while the Net Exports decreased, implying that US is slightly relying more on imports of goods. Also, proportion of GDP from government expenditure has been slowly decreasing since 1970, indicating the reduced size of US government and its fiscal decentralization approach in the country.</p>
 
                         </div>
                     </section>

@@ -51,9 +51,8 @@ library(png)
 library(magick)
 ```
 
-# Challenge 2:GDP components over time and among countries
 
-At the risk of oversimplifying things, the main components of gross domestic product, GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the [Wikipedia GDP page](https://en.wikipedia.org/wiki/Gross_domestic_product).
+The main components of GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the [Wikipedia GDP page](https://en.wikipedia.org/wiki/Gross_domestic_product).
 
 The GDP data we will look at is from the [United Nations' National Accounts Main Aggregates Database](https://unstats.un.org/unsd/snaama/Downloads), which contains estimates of total GDP and its components for all countries from 1970 to today. We will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country's GDP. The file we will work with is [GDP and its breakdown at constant 2010 prices in US Dollars](http://unstats.un.org/unsd/amaapi/api/file/6) and it has already been saved in the Data directory. Have a look at the Excel file to see how it is structured and organised
 
@@ -66,9 +65,7 @@ UN_GDP_data  <-  read_excel(here::here("data", "Download-GDPconstant-USD-countri
 
 ```
 
-The first thing you need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. Please express all figures in billions (divide values by `1e9`, or $10^9$), and you want to rename the indicators into something shorter.
-
-> make sure you remove `eval=FALSE` from the next chunk of R code-- I have it there so I could knit the document
+The first thing we need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. All figures will be expressed in billions. 
 
 ```{r reshape_GDP_data}
 
@@ -127,6 +124,8 @@ ggplot(gdp_time, aes(x=year, y=value, color= IndicatorName)) +
 
 ```
 
+From these graphs we can see that different countries have had different GDP patterns over time. For example, in the United States imports increased at an incredibly rapid rate over the past couple of years. 
+
 ```{r, calculate GDP}
 
 #calculating GDP as a sum of its components
@@ -164,7 +163,7 @@ GDP_Countries
 
 ```
 
-> What is the % difference between what you calculated as GDP and the GDP figure included in the dataframe?
+Here we calculated GDP from its basic components in order to asses the percentage difference between this figure and the GDP figure from the original dataframe. 
 
 ```{r, % difference}
 #selecting indicator GDP from UN GDP data
@@ -193,23 +192,13 @@ GDP_diff
 
 ```
 
-> What is this last chart telling you? Can you explain in a couple of paragraphs the different dynamic among these three countries? 
-
-This last chart compares the change in the proportion of the various components of GDP over time for three countries (United States, India and Germany). Since the early 2000s, Germany has increased the proportion of its GDP from Net Exports (Exports-Imports) and now has one of the highest trade surpluses in the world - this is an indicator of economic strength and competitiveness. 
-
-In India proportion of GDP from Household Expenditure has decreased sharply while there has been a sharp increase in the proportion of its GDP from Gross Capital Formation - this shows that the economy is growing quickly and investing in fixed asset (roads, railways, machinery, etc.) 
-
-Lastly, in the United States the proportion of GDP from Household Expenditure has increased while the Net Exports decreased, implying that US is slightly relying more on imports of goods. Also,  proportion of GDP from government expenditure has been slowly decreasing since 1970, indicating the reduced size of US government and its fiscal decentralization approach in the country. 
-
-
-> Change list to include my own country: Belgium. 
 
 ```{r, Proportion_GDP, fig2, fig.width=10, fig.height=6}
 
 
 trans_UN_GDP_Data <-  UN_GDP_data %>% 
   #filtering for the components of GDP that we need for 3 selected countries
-  filter(Country %in% c("Italy", "Canada", "Belgium"),
+  filter(Country %in% country_list,
          IndicatorName %in% c("Gross capital formation", 
                               "Household consumption expenditure (including Non-profit institutions serving households)",
                               "Imports of goods and services",
@@ -269,7 +258,11 @@ ggplot(trans_UN_GDP_Data, aes(x=year, y=Proportion, color= IndicatorName)) +
       
 ```
 
+This last chart compares the change in the proportion of the various components of GDP over time for three countries (United States, India and Germany). Since the early 2000s, Germany has increased the proportion of its GDP from Net Exports (Exports-Imports) and now has one of the highest trade surpluses in the world - this is an indicator of economic strength and competitiveness. 
 
+In India proportion of GDP from Household Expenditure has decreased sharply while there has been a sharp increase in the proportion of its GDP from Gross Capital Formation - this shows that the economy is growing quickly and investing in fixed asset (roads, railways, machinery, etc.) 
+
+Lastly, in the United States the proportion of GDP from Household Expenditure has increased while the Net Exports decreased, implying that US is slightly relying more on imports of goods. Also,  proportion of GDP from government expenditure has been slowly decreasing since 1970, indicating the reduced size of US government and its fiscal decentralization approach in the country.
 
 
 
