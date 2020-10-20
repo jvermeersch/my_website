@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="Belgian, 21 years old, MFA student at London Business School.">
+	<meta name="author" content="Julien Vermeersch">
+	<meta name="generator" content="Hugo 0.76.2" />
+	<title>GDP components over time &middot; Julien Vermeersch&#39;s Portfolio Website</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Portfolio</strong> <span>By Julien Vermeersch</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">Blogs</a></li>
+            
+                <li><a href="/blogs/ipsum">Generic Blog</a></li>
+            
+                <li><a href="/elements.html">Elements</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">Get Started</a></li>
+            
+            
+                <li><a href="/" class="button fit">Log In</a></li>
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>GDP components over time</h1>
+                            </header>
+                            
+                            
+
+
+<div id="challenge-2gdp-components-over-time-and-among-countries" class="section level1">
+<h1>Challenge 2:GDP components over time and among countries</h1>
+<p>At the risk of oversimplifying things, the main components of gross domestic product, GDP are personal consumption (C), business investment (I), government spending (G) and net exports (exports - imports). You can read more about GDP and the different approaches in calculating at the <a href="https://en.wikipedia.org/wiki/Gross_domestic_product">Wikipedia GDP page</a>.</p>
+<p>The GDP data we will look at is from the <a href="https://unstats.un.org/unsd/snaama/Downloads">United Nations’ National Accounts Main Aggregates Database</a>, which contains estimates of total GDP and its components for all countries from 1970 to today. We will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country’s GDP. The file we will work with is <a href="http://unstats.un.org/unsd/amaapi/api/file/6">GDP and its breakdown at constant 2010 prices in US Dollars</a> and it has already been saved in the Data directory. Have a look at the Excel file to see how it is structured and organised</p>
+<pre class="r"><code>UN_GDP_data  &lt;-  read_excel(here::here(&quot;data&quot;, &quot;Download-GDPconstant-USD-countries.xls&quot;), # Excel filename
+                sheet=&quot;Download-GDPconstant-USD-countr&quot;, # Sheet name
+                skip=2) # Number of rows to skip</code></pre>
+<p>The first thing you need to do is to tidy the data, as it is in wide format and you must make it into long, tidy format. Please express all figures in billions (divide values by <code>1e9</code>, or <span class="math inline">\(10^9\)</span>), and you want to rename the indicators into something shorter.</p>
+<blockquote>
+<p>make sure you remove <code>eval=FALSE</code> from the next chunk of R code– I have it there so I could knit the document</p>
+</blockquote>
+<pre class="r"><code>tidy_GDP_data  &lt;-  UN_GDP_data %&gt;% 
+  pivot_longer(
+               cols=&quot;1970&quot;:&quot;2017&quot;,
+               names_to = &quot;year&quot;, 
+               values_to= &quot;value&quot;
+               ) %&gt;% 
+  mutate(year= as.Date(year, &quot;%Y&quot;))
+
+glimpse(tidy_GDP_data)</code></pre>
+<pre><code>## Rows: 176,880
+## Columns: 5
+## $ CountryID     &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4…
+## $ Country       &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanist…
+## $ IndicatorName &lt;chr&gt; &quot;Final consumption expenditure&quot;, &quot;Final consumption exp…
+## $ year          &lt;date&gt; 1970-10-20, 1971-10-20, 1972-10-20, 1973-10-20, 1974-1…
+## $ value         &lt;dbl&gt; 5.56e+09, 5.33e+09, 5.20e+09, 5.75e+09, 6.15e+09, 6.32e…</code></pre>
+<pre class="r"><code># Let us compare GDP components for these 3 countries
+country_list &lt;- c(&quot;United States&quot;,&quot;India&quot;, &quot;Germany&quot;)</code></pre>
+<p>GDP is the sum of Household Expenditure (Consumption <em>C</em>), Gross Capital Formation (business investment <em>I</em>), Government Expenditure (G) and Net Exports (exports - imports). We will calculate it given the components discussed above.</p>
+<pre class="r"><code>gdp_time &lt;- tidy_GDP_data %&gt;% 
+  #filtering for the components of GDP and countries that we need
+  filter(Country %in% country_list,
+         IndicatorName %in% c(&quot;Gross capital formation&quot;, 
+                              &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
+                              &quot;Imports of goods and services&quot;,
+                              &quot;Exports of goods and services&quot;,
+                              &quot;General government final consumption expenditure&quot;)) %&gt;% 
+  mutate(value= value/ 1e9) 
+
+gdp_time &lt;- gdp_time  %&gt;% 
+  mutate(
+    IndicatorName= case_when(
+      IndicatorName == &quot;Imports of goods and services&quot; ~ &quot;Imports&quot;,
+      IndicatorName == &quot;Exports of goods and services&quot; ~ &quot;Exports&quot;,
+      IndicatorName == &quot;General government final consumption expenditure&quot; ~ &quot;Government Expenditure&quot;,
+      IndicatorName == &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot; ~ &quot;Household Expenditure&quot;,
+      IndicatorName ==&quot;Gross capital formation&quot;~&quot;Gross Capital Formation&quot;
+    ))
+
+
+ggplot(gdp_time, aes(x=year, y=value, color= IndicatorName)) +
+  geom_line(aes(group=IndicatorName))+
+  facet_wrap(~Country)+
+  theme_bw()+
+  labs(
+    title = &quot;GDP Components over time&quot;,
+    subtitle= &quot;In constant 2010 USD&quot;,
+    y=&quot;Billion US$&quot;,
+    color= &quot;Components of GDP&quot;)+
+  theme(axis.title.x=element_blank())</code></pre>
+<p><img src="/projects/project2/index_files/figure-html/GDP_Components_Over_Time,%20fig1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#calculating GDP as a sum of its components
+GDP_Countries &lt;- tidy_GDP_data %&gt;% 
+  #filtering for the components of GDP 
+  filter(IndicatorName %in% c(&quot;Gross capital formation&quot;, 
+                              &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
+                              &quot;Imports of goods and services&quot;,
+                              &quot;Exports of goods and services&quot;,
+                              &quot;General government final consumption expenditure&quot;)) %&gt;%  
+  mutate(
+    IndicatorName= case_when(
+      IndicatorName == &quot;Imports of goods and services&quot; ~ &quot;Imports&quot;,
+      IndicatorName == &quot;Exports of goods and services&quot; ~ &quot;Exports&quot;,
+      IndicatorName == &quot;General government final consumption expenditure&quot; ~ &quot;Government Expenditure&quot;,
+      IndicatorName == &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot; ~ &quot;Household Expenditure&quot;,
+      IndicatorName ==&quot;Gross capital formation&quot;~&quot;Gross Capital Formation&quot;
+    )) %&gt;% 
+pivot_wider(names_from= IndicatorName, values_from=value) %&gt;% 
+  #calculating Net Exports
+  mutate(Net_Exports= Exports-Imports, 
+         #extracting the year from the date 
+         year=year(year)) %&gt;% 
+  select(-Imports, -Exports) %&gt;% 
+  pivot_longer(
+    cols=4:7,
+    names_to = &quot;IndicatorName&quot;, 
+    values_to= &quot;value&quot;) %&gt;% 
+  group_by(year, Country) %&gt;% 
+  #summing the components of GDP and assigning to Gross_Domestic_Product
+  summarise(Gross_Domestic_Product= sum(value))
+
+GDP_Countries</code></pre>
+<pre><code>## # A tibble: 10,560 x 3
+## # Groups:   year [48]
+##     year Country             Gross_Domestic_Product
+##    &lt;dbl&gt; &lt;chr&gt;                                &lt;dbl&gt;
+##  1  1970 Afghanistan                    6350432433.
+##  2  1970 Albania                        3351761022.
+##  3  1970 Algeria                       46680448513.
+##  4  1970 Andorra                        1051249180.
+##  5  1970 Angola                        23042593319.
+##  6  1970 Anguilla                         32264914.
+##  7  1970 Antigua and Barbuda             262655839.
+##  8  1970 Argentina                    160111327434.
+##  9  1970 Armenia                                NA 
+## 10  1970 Aruba                           234175779.
+## # … with 10,550 more rows</code></pre>
+<blockquote>
+<p>What is the % difference between what you calculated as GDP and the GDP figure included in the dataframe?</p>
+</blockquote>
+<pre class="r"><code>#selecting indicator GDP from UN GDP data
+UN_GDP &lt;- UN_GDP_data %&gt;% 
+  filter(IndicatorName==&quot;Gross Domestic Product (GDP)&quot;) %&gt;% 
+  pivot_longer(
+    cols=&quot;1970&quot;:&quot;2017&quot;,
+    names_to = &quot;year&quot;, 
+    values_to= &quot;value&quot;
+  ) %&gt;% 
+  rename(United_Nations_Data_GDP= &quot;value&quot;)
+
+GDP_Countries &lt;-
+  GDP_Countries %&gt;% 
+  mutate(year=as.character(year)) 
+
+#joining the UN GDP values with the calculated GDP and computing the percentage difference
+GDP_diff&lt;- inner_join(GDP_Countries, UN_GDP, by=c(&quot;Country&quot;, &quot;year&quot;)) %&gt;% 
+  mutate(percentage_difference_in_GDP= (Gross_Domestic_Product-
+                                          United_Nations_Data_GDP)/ United_Nations_Data_GDP) %&gt;% 
+  select(Country, year, percentage_difference_in_GDP)
+
+paste(&quot;Percentage difference in GDP calculated vs GDP figure included in the dataframe:&quot;)</code></pre>
+<pre><code>## [1] &quot;Percentage difference in GDP calculated vs GDP figure included in the dataframe:&quot;</code></pre>
+<pre class="r"><code>GDP_diff</code></pre>
+<pre><code>## # A tibble: 10,560 x 3
+## # Groups:   year [48]
+##    Country             year  percentage_difference_in_GDP
+##    &lt;chr&gt;               &lt;chr&gt;                        &lt;dbl&gt;
+##  1 Afghanistan         1970                      -0.408  
+##  2 Albania             1970                      -0.0768 
+##  3 Algeria             1970                       0.171  
+##  4 Andorra             1970                       0.00429
+##  5 Angola              1970                      -0.0383 
+##  6 Anguilla            1970                      -0.0728 
+##  7 Antigua and Barbuda 1970                      -0.00565
+##  8 Argentina           1970                      -0.0871 
+##  9 Armenia             1970                      NA      
+## 10 Aruba               1970                      -0.0200 
+## # … with 10,550 more rows</code></pre>
+<blockquote>
+<p>What is this last chart telling you? Can you explain in a couple of paragraphs the different dynamic among these three countries?</p>
+</blockquote>
+<p>This last chart compares the change in the proportion of the various components of GDP over time for three countries (United States, India and Germany). Since the early 2000s, Germany has increased the proportion of its GDP from Net Exports (Exports-Imports) and now has one of the highest trade surpluses in the world - this is an indicator of economic strength and competitiveness.</p>
+<p>In India proportion of GDP from Household Expenditure has decreased sharply while there has been a sharp increase in the proportion of its GDP from Gross Capital Formation - this shows that the economy is growing quickly and investing in fixed asset (roads, railways, machinery, etc.)</p>
+<p>Lastly, in the United States the proportion of GDP from Household Expenditure has increased while the Net Exports decreased, implying that US is slightly relying more on imports of goods. Also, proportion of GDP from government expenditure has been slowly decreasing since 1970, indicating the reduced size of US government and its fiscal decentralization approach in the country.</p>
+<blockquote>
+<p>Change list to include my own country: Belgium.</p>
+</blockquote>
+<pre class="r"><code>trans_UN_GDP_Data &lt;-  UN_GDP_data %&gt;% 
+  #filtering for the components of GDP that we need for 3 selected countries
+  filter(Country %in% c(&quot;Italy&quot;, &quot;Canada&quot;, &quot;Belgium&quot;),
+         IndicatorName %in% c(&quot;Gross capital formation&quot;, 
+                              &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
+                              &quot;Imports of goods and services&quot;,
+                              &quot;Exports of goods and services&quot;,
+                              &quot;General government final consumption expenditure&quot;,
+                              &quot;Gross Domestic Product (GDP)&quot;)) %&gt;% 
+  mutate(IndicatorName= case_when(
+      IndicatorName == &quot;Imports of goods and services&quot; ~ &quot;Imports&quot;,
+      IndicatorName == &quot;Exports of goods and services&quot; ~ &quot;Exports&quot;,
+      IndicatorName == &quot;General government final consumption expenditure&quot; ~ &quot;Government_Expenditure&quot;,
+      IndicatorName == &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot; ~ &quot;Household_Expenditure&quot;,
+      IndicatorName ==&quot;Gross capital formation&quot;~&quot;Gross_Capital_Formation&quot;,
+      IndicatorName ==&quot;Gross Domestic Product (GDP)&quot;~&quot;GDP&quot;
+    )) %&gt;% 
+  pivot_longer(
+    cols=&quot;1970&quot;:&quot;2017&quot;,
+    names_to = &quot;year&quot;, 
+    values_to= &quot;value&quot;
+  ) %&gt;% 
+  mutate(year= as.Date(year, &quot;%Y&quot;)) %&gt;% 
+  #changing to wide format to calculate the proportion of GDP for various components
+  pivot_wider(names_from = IndicatorName, values_from= &quot;value&quot;) %&gt;% 
+  mutate(
+    Net_Exports= Exports- Imports,
+    perc_NE= Net_Exports/ GDP,
+    perc_GE= Government_Expenditure/ GDP,
+    perc_GCF= Gross_Capital_Formation/GDP,
+    perc_HE= Household_Expenditure/GDP
+  ) %&gt;% 
+  #pivoting back to long format in order to create a time series plot
+  pivot_longer(cols= &quot;perc_NE&quot;: &quot;perc_HE&quot;, names_to= &quot;IndicatorName&quot;, values_to= &quot;Proportion&quot;) %&gt;% 
+  mutate(
+    IndicatorName= case_when(
+      IndicatorName == &quot;perc_HE&quot; ~ &quot;Household_Expenditure&quot;,
+      IndicatorName ==&quot;perc_GCF&quot;~&quot;Gross_Capital_Formation&quot;,
+      IndicatorName ==&quot;perc_NE&quot;~&quot;Net_Exports&quot;,
+      IndicatorName== &quot;perc_GE&quot;~&quot;Government_Expenditure&quot;
+    )) 
+
+ggplot(trans_UN_GDP_Data, aes(x=year, y=Proportion, color= IndicatorName)) +
+  geom_line(aes(group=IndicatorName))+
+  facet_wrap(~Country)+
+  theme_bw()+
+  labs(
+    title = &quot;GDP and its breakdown at constant 2010 prices in US Dollars&quot;,
+    y=&quot;proportion&quot;,
+    color= &quot;Components of GDP&quot;,
+    caption=&quot;Source: United Nations , https://unstats.un.org/unsd/snaama/Downloads&quot;
+  )+
+  theme(
+    axis.title.x=element_blank(),
+    legend.title = element_blank()
+  )+
+  scale_y_continuous(labels = scales::percent)+
+  theme_bw()</code></pre>
+<p><img src="/projects/project2/index_files/figure-html/Proportion_GDP,%20fig2-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://www.twitter.com" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Company Name</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>
