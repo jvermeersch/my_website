@@ -71,13 +71,13 @@ disqusShortname = ""
 
     # Button Style 1
     [[params.navigation.button1]]
-      name = "Get Started"
-      url = "projects"
+      name = "Return to main page"
+      url = ""
 
     # Button Style 2
-    [[params.navigation.button2]]
-      name = "Log In"
-      url = "#"
+  #  [[params.navigation.button2]]
+   #   name = "Log In"
+    #  url = "#"
 
 
   # Banner section
