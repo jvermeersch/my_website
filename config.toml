@@ -107,13 +107,13 @@ disqusShortname = ""
       title = "GDP Components"
       subtitle = "An in depth comparison"
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "blogs/blog3"
 
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
       subtitle = "Is a recession looming around the corner?"
       image = "pic04.jpg"
-      url = "blogs/blog4"
+      url = "projects/project3"
 
     # [[params.tiles.showcase]]
     #  title = "Consequat"
