@@ -1,5 +1,5 @@
 ---
-title: "Session 6: Homework 3"
+title: "GDP Components"
 author: "Group 12A"
 date: "`r Sys.Date()`"
 output:
@@ -43,7 +43,15 @@ library(broom)
 library(tidyquant)
 library(infer)
 library(openintro)
-library(tidyquant)
+library(lubridate)
+library(httr)
+library(vroom)
+library(jpeg)
+library(png)
+library(kableExtra)
+library(knitr)  
+library(ggplot2)  
+library(magick)
 ```
 
 # Challenge 2:GDP components over time and among countries
