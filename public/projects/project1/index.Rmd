@@ -52,10 +52,17 @@ listings <- vroom("http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/da
   clean_names()
 
 ```
+
+# Introduction
+
+Welcome to my blog on the prices of AirBnb in Hong Kong, China. In this section, I will discuss an analysis I did as part of my final assignment for the Data Analytics course I took at the London Business School. 
+
 # Exploratory Data Analysis(EDA)
 
 ## Looking at the raw values
-Using the glimpse to look at the data, we know that there are 11,187 observations and 106 variable from the original data.
+We use the glimpse function to get a brief overview of the data. The dataset consists of 11,187 observations and 106 different variables. 
+
+
 ``` {r glimpse}
 
 glimpse(listings)
@@ -66,6 +73,7 @@ glimpse(listings)
 
 We see 46 character-types, 38 numeric-types, 17 logical-types, and 5 date-types.
 Examining the data, we noticed: 1) a lot of variables are either left- or right- skewed; 2) variable like price and space are stored as characters and required to be converted; 3)there are outliers in the variables, e.g. minimum nights of stay of 1100.
+
 ```{R summury}
 
 skimr::skim(listings)
@@ -79,7 +87,10 @@ mosaic::favstats(~minimum_nights, data= listings)
 mosaic::favstats(~zipcode, data= listings) #missing values
 
 ```
+
 ## Data wrangling and Handling missing values(NAs)
+
+In this section, we tidy the data in order to get a 'workable' dataset. This dataset will then be used for visualisations and ultimately to predict the price of AirBnb for 4 nights in Hong Kong. 
 
 ```{r data wrangling}
 

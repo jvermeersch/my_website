@@ -33,8 +33,8 @@ GDP can be divided into 4 main components, which are consumption (C), business i
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/projects/project1/</guid>
-      <description>Exploratory Data Analysis(EDA) Looking at the raw values Using the glimpse to look at the data, we know that there are 11,187 observations and 106 variable from the original data.
-glimpse(listings) ## Rows: 11,187 ## Columns: 106 ## $ id &amp;lt;dbl&amp;gt; 69074, 75083, 103760, 13… ## $ listing_url &amp;lt;chr&amp;gt; &amp;quot;https://www.airbnb.com/… ## $ scrape_id &amp;lt;dbl&amp;gt; 2.02e+13, 2.02e+13, 2.02… ## $ last_scraped &amp;lt;date&amp;gt; 2020-06-17, 2020-06-17,… ## $ name &amp;lt;chr&amp;gt; &amp;quot;Beautiful oasis of plan… ## $ summary &amp;lt;chr&amp;gt; &amp;quot;An ideal Hong location … ## $ space &amp;lt;chr&amp;gt; &amp;quot;Filled with plants and … ## $ description &amp;lt;chr&amp;gt; &amp;quot;An ideal Hong location … ## $ experiences_offered &amp;lt;chr&amp;gt; &amp;quot;none&amp;quot;, &amp;quot;none&amp;quot;, &amp;quot;none&amp;quot;, … ## $ neighborhood_overview &amp;lt;chr&amp;gt; &amp;quot;In the upper part of tr… ## $ notes &amp;lt;chr&amp;gt; NA, &amp;quot;Once you arrive in … ## $ transit &amp;lt;chr&amp;gt; &amp;quot;Buses pass often along … ## $ access &amp;lt;chr&amp;gt; &amp;quot;All access, except one … ## $ interaction &amp;lt;chr&amp;gt; &amp;quot;If a guest is staying t… ## $ house_rules &amp;lt;chr&amp;gt; &amp;quot;Everything to make your… ## $ thumbnail_url &amp;lt;lgl&amp;gt; NA, NA, NA, NA, NA, NA, … ## $ medium_url &amp;lt;lgl&amp;gt; NA, NA, NA, NA, NA, NA, … ## $ picture_url &amp;lt;chr&amp;gt; &amp;quot;https://a0.</description>
+      <description>Introduction Welcome to my blog on the prices of AirBnb in Hong Kong, China. In this section, I will discuss an analysis I did as part of my final assignment for the Data Analytics course I took at the London Business School.
+ Exploratory Data Analysis(EDA) Looking at the raw values We use the glimpse function to get a brief overview of the data.</description>
     </item>
     
   </channel>
