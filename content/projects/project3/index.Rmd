@@ -164,7 +164,6 @@ ggplot(yield_curve_1998, aes(x=maturity, y=price))+
 
 ```
 
-The above graph that sums up the data on a year-by-year basis, clearly underlines that the yields have decreased a lot since 1999. This as a direct opposite to the one before, that showed a rather stable trend of the data.
 
 ### 3-month and 10-year yields since 1999
 
