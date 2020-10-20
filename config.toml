@@ -101,13 +101,13 @@ disqusShortname = ""
       title = "Movie Ratings"
       subtitle = "An overview of the different genres"
       image = "pic02.jpg"
-      url = "blogs/blog2"
+      url = "projects/project1"
 
     [[params.tiles.showcase]]
       title = "GDP Components"
       subtitle = "An in depth comparison"
       image = "pic03.jpg"
-      url = "blogs/blog3"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
